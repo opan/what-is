@@ -26,9 +26,31 @@ class App extends Component {
   //   )
   // }
   render() {
+    const characters = [
+      {
+        name: 'Charlie',
+        job: 'Janitor',
+      },
+      {
+        name: 'Mac',
+        job: 'Bouncer',
+      },
+      {
+        name: 'Dee',
+        job: 'Aspring actress',
+      },
+      {
+        name: 'Dennis',
+        job: 'Bartender',
+      },
+      {
+        name: 'Opan',
+        job: 'Systems Engineer'
+      },
+    ]
     return (
       <div className='container'>
-        <Table />
+        <Table charactersData={characters} />
       </div>
     )
   }
