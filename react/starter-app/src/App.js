@@ -4,29 +4,9 @@ import React, { Component } from 'react';
 import Table from "./Table";
 
 class App extends Component {
-  // render() {
-  //   return (
-  //     <div className="App">
-  //       <header className="App-header">
-  //         <img src={logo} className="App-logo" alt="logo" />
-  //         <p>
-  //           Edit <code>src/App.js</code> and save to reload.
-  //         </p>
-  //         <a
-  //           className="App-link"
-  //           href="https://reactjs.org"
-  //           target="_blank"
-  //           rel="noopener noreferrer"
-  //         >
-  //           Learn React
-  //           Sudah berubah?
-  //         </a>
-  //       </header>
-  //     </div>
-  //   )
-  // }
-  render() {
-    const characters = [
+  state = {
+    characters: [
+
       {
         name: 'Charlie',
         job: 'Janitor',
@@ -48,12 +28,28 @@ class App extends Component {
         job: 'Systems Engineer'
       },
     ]
+  }
+
+  removeCharacter = (index) => {
+    const { characters } = this.state
+
+    this.setState({
+      characters: characters.filter((character, i) => {
+        return i !== index
+      }),
+    })
+  }
+
+  render() {
+    const { characters } = this.state
+
     return (
       <div className='container'>
-        <Table charactersData={characters} />
+        <Table charactersData={characters} removeCharacter={this.removeCharacter} />
       </div>
     )
   }
 }
+
 
 export default App
