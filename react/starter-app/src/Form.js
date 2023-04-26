@@ -1,4 +1,4 @@
-import Reac, { Component } from 'react'
+import React, { Component } from 'react'
 
 class Form extends Component {
   initialState = {
@@ -16,6 +16,11 @@ class Form extends Component {
     })
   }
 
+  submitForm = () => {
+    this.props.handleSubmit(this.state)
+    this.setState(this.initialState)
+  }
+
   render() {
     const { name, job } = this.state;
 
@@ -27,7 +32,7 @@ class Form extends Component {
           name="name"
           id="name"
           value={name}
-          onChage={this.handleChange}/>
+          onChange={this.handleChange}/>
         
         <label htmlFor='job'>Job</label>
         <input
@@ -36,6 +41,8 @@ class Form extends Component {
           id='job'
           value={job}
           onChange={this.handleChange}/>
+
+        <input type='button' value='submit' onClick={this.submitForm}/>
       </form>
     )
   }
