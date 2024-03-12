@@ -5,7 +5,20 @@
 ```
 docker-compose up -d
 
+# to access the kafka-ui, open the url below in browser
+http://localhost:8080
+
+# login to kafka broker
+
+docker compose exec kafka-<number> sh
+
 ```
+
+official docker image from apache:
+https://github.com/apache/kafka/blob/trunk/docker/examples/README.md
+
+
+## Setup kafka cli/client
 
 Docker image source: https://hub.docker.com/r/bitnami/kafka
 

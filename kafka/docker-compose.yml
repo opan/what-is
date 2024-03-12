@@ -1,6 +1,6 @@
 services:
   kafka-1:
-    image: 'bitnami/kafka:3.3.1'
+    image: 'bitnami/kafka:3.7.0'
     container_name: kafka-1
     environment:
       - KAFKA_ENABLE_KRAFT=yes
@@ -13,11 +13,12 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9092
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_KRAFT_CLUSTER_ID=r4zt_wrqTRuT7W2NJsB_GA
+      - KAFKA_CFG_NODE_ID=1
     ports:
       - 9192:9092
 
   kafka-2:
-    image: 'bitnami/kafka:3.3.1'
+    image: 'bitnami/kafka:3.7.0'
     container_name: kafka-2
     environment:
       - KAFKA_ENABLE_KRAFT=yes
@@ -30,11 +31,12 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-2:9092
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_KRAFT_CLUSTER_ID=r4zt_wrqTRuT7W2NJsB_GA
+      - KAFKA_CFG_NODE_ID=2
     ports:
       - 9292:9092
       
   kafka-3:
-    image: 'bitnami/kafka:3.3.1'
+    image: 'bitnami/kafka:3.7.0'
     container_name: kafka-3
     environment:
       - KAFKA_ENABLE_KRAFT=yes
@@ -47,6 +49,7 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-3:9092
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_KRAFT_CLUSTER_ID=r4zt_wrqTRuT7W2NJsB_GA
+      - KAFKA_CFG_NODE_ID=3
     ports:
       - 9392:9092
 
