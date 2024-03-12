@@ -1,5 +1,14 @@
 # Kafka v3
 
+## Using docker-compose
+
+```
+docker-compose up -d
+
+```
+
+Docker image source: https://hub.docker.com/r/bitnami/kafka
+
 ### Partition
 
 Producer can only write a topic to a partition leader (default behaviour)
