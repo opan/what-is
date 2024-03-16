@@ -12,6 +12,9 @@ http://localhost:8080
 
 docker compose exec kafka-<number> sh
 
+# or
+docker compose exec kafka-<number> /bin/bash
+
 ```
 
 official docker image from apache:
