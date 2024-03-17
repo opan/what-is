@@ -70,6 +70,7 @@ creating a topic
 ```
 
 ```
+# --producer.config is optional
 # standard command
 ./kafka-console-producer.sh --producer.config ../config/producer.properties --bootstrap-server localhost:9092 --topic first_topic
 
@@ -87,11 +88,15 @@ creating a topic
 ### Kafka consumer
 
 ```
+# --consumer.config is optional
 # default, consume only the latest messsage, only message published when the command is executed
 ./kafka-console-consumer.sh --consumer.config ../config/consumer.properties --bootstrap-server localhost:9092 --topic first_topic
 
 # read all messages from beginning
 ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic --from-beginning
+
+# specify --consumer-property, e.g: to set group.id
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic --from-beginning --consumer-property group.id=test-consumer-group
 
 ```
 
@@ -100,4 +105,14 @@ creating a topic
 ```
 # list all consumer groups available
 ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+
+# describe a consumer group
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group <consumer-group-name>
+
+# reset offset in a consumer group
+# --dry-run is used to test the command before actually applying the command
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group <consumer-group-name> --reset-offsets --to-earliest --topic <topic-name> --dry-run
+
+# --execute is used to actually apply the command
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group <consumer-group-name> --reset-offsets --to-earliest --topic <topic-name> --execute
 ```
