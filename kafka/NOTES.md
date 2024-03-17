@@ -15,6 +15,13 @@ docker compose exec kafka-<number> sh
 # or
 docker compose exec kafka-<number> /bin/bash
 
+# once inside, you can find the kafka CLI in /opt/bitnami/kafka/bin
+
+cd /opt/bitnami/kafka/bin
+
+# try one of the kafka command
+./kafka-topics.sh --bootstrap-server localhost:9092 --list
+
 ```
 
 official docker image from apache:
@@ -53,3 +60,44 @@ e.g: replication factor of 3, can maintain the data from 2 brokers loss.
 - To help in leader election for partitions.
 - To send notifications to any changes happen to kafka brokers.
 - Operate in odd numbers, 1, 3, 5, 7
+
+### Kafka producer
+
+creating a topic
+
+```
+./kafka-topics.sh --bootstrap-server localhost:9092 --topic <topic-name> --partitions 3 --create
+```
+
+```
+# standard command
+./kafka-console-producer.sh --producer.config ../config/producer.properties --bootstrap-server localhost:9092 --topic first_topic
+
+# with property, acks=all
+./kafka-console-producer.sh --producer.config ../config/producer.properties --bootstrap-server localhost:9092 --topic first_topic --producer-property acks=all
+
+# with more property to specify key message
+./kafka-console-producer.sh --producer.config ../config/producer.properties --bootstrap-server localhost:9092 --topic first_topic --property parse.key=true --property key.separator=:
+
+
+# specify producer-property with round-robin parititioner
+./kafka-console-producer.sh --producer.config ../config/producer.properties --bootstrap-server localhost:9092 --topic first_topic --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner
+```
+
+### Kafka consumer
+
+```
+# default, consume only the latest messsage, only message published when the command is executed
+./kafka-console-consumer.sh --consumer.config ../config/consumer.properties --bootstrap-server localhost:9092 --topic first_topic
+
+# read all messages from beginning
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic --from-beginning
+
+```
+
+### Kafka consumer group
+
+```
+# list all consumer groups available
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+```
