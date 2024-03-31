@@ -116,3 +116,42 @@ creating a topic
 # --execute is used to actually apply the command
 ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group <consumer-group-name> --reset-offsets --to-earliest --topic <topic-name> --execute
 ```
+
+### Kafka consumer offset reset behaviour
+
+```
+auto.offset.reset=latest # will read from the end of the log, or latest
+auto.offset.reset=earliest # will read from the start of the log
+auto.offset.reset=none # will throw an exception if no offset is found
+
+```
+
+default consumer offset retention:
+
+- Kafka < 2.0: 1 day
+- Kafka >= 2.0: 7 day
+
+consumer offset retention config:
+```
+offset.retention.minutes
+```
+
+to replay data for consumer group:
+- Take all consumers from a specific group down
+- User `kafka-consumer-groups` command to set the target offset
+- Restart consumers
+
+
+### Consumer heartbeat thread
+
+```
+# specify how often the consumer groups send the heartbeats to consumer
+# usually 1/3rd of `session.timeout.ms`
+heartbeat.interval.ms # default 3ms
+
+
+# specify how often to send heartbeat to broker 
+# if no heartbeat send during this time period, then the consumer is considered dead
+session.timeout.ms # default 45s for v3+, 10s for < v3
+
+```
