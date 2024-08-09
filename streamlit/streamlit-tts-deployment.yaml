@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: streamlit-tts
+  labels:
+    app: streamlit-tts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: streamlit-tts
+  template:
+    metadata:
+      labels:
+        app: streamlit-tts
+    spec:
+      containers:
+      - name: streamlit-tts
+        image: goto-streamlit-tts:latest # Replace with your actual image name and tag
+        # args: ["streamlit", "run", "TTS/server/server.py"] # Modify this as per your app's entry point
+        ports:
+        - containerPort: 8501
+        imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: streamlit-tts
+spec:
+  selector:
+    app: streamlit-tts
+  ports:
+  - protocol: TCP
+    port: 8501
+    targetPort: 8501
+  # Uncomment this if you choose to use LoadBalancer instead of the default ClusterIP
+  # type: LoadBalancer

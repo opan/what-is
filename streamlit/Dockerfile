@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --no-cache-dir TTS streamlit
 
 # Copy the application code (if you have any)
-COPY . .
+COPY app-tts.py app-tts.py
 
 # Specify the command to run the application
 # CMD ["python3", "your_script.py"]
