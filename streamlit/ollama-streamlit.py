@@ -75,7 +75,8 @@ def main():
                             messages=[{
                                 "role": "user",
                                 "content": prompt
-                            }]
+                            }],
+                            stream=True
                         )
 
                     except Exception as e:
