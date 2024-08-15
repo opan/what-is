@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llama-deployment
+  labels:
+    app: llama-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llama-app
+  template:
+    metadata:
+      labels:
+        app: llama-app
+    spec:
+      containers:
+      - name: ollama
+        image: ollama/ollama:latest
+        ports:
+        - containerPort: 11434
+        imagePullPolicy: IfNotPresent
+      - name: llama-streamlit
+        image: llama-streamlit:latest
+        ports:
+        - containerPort: 8501
+        imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llama-service
+spec:
+  selector:
+    app: llama-app
+  ports:
+  - name: ollama
+    protocol: TCP
+    port: 11434
+    targetPort: 11434
+  - name: llama-streamlit
+    protocol: TCP
+    port: 8501
+    targetPort: 8501
+  # type: LoadBalancer
+---

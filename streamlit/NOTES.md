@@ -50,5 +50,5 @@ kubectl port-forward service/streamlit-tts 8501:8501
 ##### Get list of images in KIND cluster
 
 ```
-docker exec -it my-cluster-control-plane crictl images
+docker exec -it llm-test-control-plane crictl images
 ```
