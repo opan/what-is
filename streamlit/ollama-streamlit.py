@@ -1,3 +1,4 @@
+# ref: https://medium.com/@maximejabarian/building-a-local-llms-app-with-streamlit-and-ollama-llama3-phi3-511d519c95fe
 import streamlit as st
 import logging
 import time
@@ -45,8 +46,17 @@ def main():
     # logging.info(f"Model selected: {model}")
     model = "llama3.1:8b"
 
-    logging.info(f"Pulling model: {model}")
-    client.pull(model)
+    pull_model = True
+    list_model = client.list()
+
+    for m in list_model['models']:
+      if m['model'] == model:
+        pull_model = False
+
+    # Pull the selected model if it is not already present
+    if pull_model:
+      logging.info(f"Pulling model: {model}")
+      client.pull(model)
 
     # Prompt for user input and save to chat history
     if prompt := st.chat_input("Your question"):
