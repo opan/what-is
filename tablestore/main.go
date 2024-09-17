@@ -22,6 +22,7 @@ func main() {
 	instanceName := os.Getenv("TABLESTORE_INSTANCE")
 	accessKeyID := os.Getenv("TABLESTORE_ACCESS_KEY_ID")
 	accessKeySecret := os.Getenv("TABLESTORE_ACCESS_KEY_SECRET")
+	tableName := os.Getenv("TABLESTORE_TABLE_NAME")
 
 	if endpoint == "" || instanceName == "" || accessKeyID == "" || accessKeySecret == "" {
 		fmt.Println("Error: Missing environment variables for Tablestore credentials.")
@@ -30,15 +31,15 @@ func main() {
 	// Initialize the Tablestore client
 	client := tablestore.NewClient(endpoint, instanceName, accessKeyID, accessKeySecret)
 
-	tableExists := checkTable(client, "SampleTable")
+	tableExists := checkTable(client, tableName)
 
 	if !tableExists {
 		// Create the table
-		createTable(client)
+		createTable(client, tableName)
 	}
 
 	// Write data to the table
-	writeData(client, "SampleTable", "Row1", "example value")
+	writeData(client, tableName, "Row3", "example 3000 value")
 }
 
 func checkTable(client *tablestore.TableStoreClient, tableName string) bool {
@@ -61,9 +62,9 @@ func checkTable(client *tablestore.TableStoreClient, tableName string) bool {
 }
 
 // Function to create a table
-func createTable(client *tablestore.TableStoreClient) {
+func createTable(client *tablestore.TableStoreClient, tableName string) {
 	tableMeta := new(tablestore.TableMeta)
-	tableMeta.TableName = "SampleTable"
+	tableMeta.TableName = tableName
 	tableMeta.AddPrimaryKeyColumn("PK1", tablestore.PrimaryKeyType_STRING)
 
 	tableOption := new(tablestore.TableOption)
