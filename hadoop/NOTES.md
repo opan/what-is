@@ -11,3 +11,10 @@ use `jps` to confirm if datanode and namenodes is working
 	•	NameNode Web UI: http://localhost:9870
 	•	DataNode Web UI: http://localhost:9864
 	•	SecondaryNameNode Web UI: http://localhost:9868
+
+
+to fix issue not able to browse directory from the web ui, ensure to set `JAVA_HOME` in `etc/hadoop-env.sh`
+
+we can also set `HADOOP_SSH_OPTS` in the same file
+
+after making changes, stop and start `dfs` via `sbin`
