@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: janusgraph-lindorm
+  namespace: janusgraph
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: janusgraph-lindorm
+  template:
+    metadata:
+      labels:
+        app: janusgraph-lindorm
+    spec:
+      containers:
+      - name: janusgraph-lindorm
+        image: janusgraph/janusgraph:1.0.0
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "1"
+          limits:
+            memory: "4Gi"
+            cpu: "4"
+        ports:
+        - containerPort: 8182  # JanusGraph default port
+        volumeMounts:
+        - name: janusgraph-lindorm-config
+          mountPath: /opt/janusgraph/conf
+        # startupProbe:
+        #   httpGet:
+        #     path: /?gremlin=100-1
+        #     port: 8182
+        #   initialDelaySeconds: 60
+        #   failureThreshold: 10
+        #   periodSeconds: 5
+        #   timeoutSeconds: 1
+        # livenessProbe:
+        #   tcpSocket:
+        #     port: 8182
+        #   initialDelaySeconds: 30
+        #   failureThreshold: 3
+        #   periodSeconds: 10
+        #   timeoutSeconds: 1
+        # readinessProbe:
+        #   httpGet:
+        #     path: /?gremlin=100-1
+        #     port: 8182
+        #   initialDelaySeconds: 0
+        #   periodSeconds: 2
+        #   timeoutSeconds: 1
+      volumes:
+      - name: janusgraph-lindorm-config
+        configMap:
+          name: janusgraph-lindorm-config
