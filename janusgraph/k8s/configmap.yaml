@@ -5,15 +5,15 @@ metadata:
   name: janusgraph-lindorm-config
   namespace: janusgraph
 data:
-  janusgraph-lindorm.properties: |+
+  janusgraph-lindorm-server.properties: |+
     gremlin.graph=org.janusgraph.core.JanusGraphFactory
     storage.backend: hbase
     storage.directory: null
     storage.read-only: false
     storage.hbase.table: test-lindorm
-    storage.hostname: xxx.rds.aliyuncs.com:30020
+    storage.hostname: xxxx-indorm.lindorm.rds.aliyuncs.com:30020
     storage.hbase.ext.hbase.client.username: root
-    storage.hbase.ext.hbase.client.password: bar
+    storage.hbase.ext.hbase.client.password: xxxx
 
     cache.db-cache: false
     cache.db-cache-clean-wait: 20
@@ -23,7 +23,7 @@ data:
     graph.replace-instance-if-exists: true
     metrics.enabled: false
     metrics.jmx.enabled: false
-    ids.block-size: "1000000"
+    ids.block-size: 1000000
     query.batch: true
     query.limit-batch-size: true
     schema.constraints: true
@@ -37,10 +37,10 @@ data:
     port: 8182
     channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
     graphs: {
-      graph: conf/janusgraph-lindorm.properties
+      graph: conf/janusgraph-lindorm-server.properties
     }
 
-    evaluationTimeout: 30000
+    evaluationTimeout: 50000
     maxInitialLineLength: 4096
     maxHeaderSize: 8192
     maxChunkSize: 8192
@@ -74,10 +74,10 @@ data:
       - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONMessageSerializerV1, config: { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistryV1d0] }}
       - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONUntypedMessageSerializerV1, config: { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistryV1d0] }}
 
-    processors:
-      - { className: org.apache.tinkerpop.gremlin.server.op.session.SessionOpProcessor, config: { sessionTimeout: 28800000, maxParameters: 64 }}
-      - { className: org.apache.tinkerpop.gremlin.server.op.traversal.TraversalOpProcessor, config: { cacheExpirationTime: 600000, cacheMaxSize: 1000 }}
-      - { className: org.apache.tinkerpop.gremlin.server.op.standard.StandardOpProcessor, config: { maxParameters: 64 }}
+    # processors:
+    #   - { className: org.apache.tinkerpop.gremlin.server.op.session.SessionOpProcessor, config: { sessionTimeout: 28800000, maxParameters: 64 }}
+    #   - { className: org.apache.tinkerpop.gremlin.server.op.traversal.TraversalOpProcessor, config: { cacheExpirationTime: 600000, cacheMaxSize: 1000 }}
+    #   - { className: org.apache.tinkerpop.gremlin.server.op.standard.StandardOpProcessor, config: { maxParameters: 64 }}
 
     # metrics: {
     #   consoleReporter: {enabled: false, interval: 180000},
@@ -86,8 +86,6 @@ data:
     #   slf4jReporter: {enabled: {{ .Values.janusgraphServer.metrics.slf4jReporter.enabled }}, interval: {{ .Values.janusgraphServer.metrics.slf4jReporter.intervalMS }} },
     #   gangliaReporter: {enabled: false, interval: 180000, addressingMode: MULTICAST},
     #   graphiteReporter: {enabled: false, interval: 180000}}
-    threadPoolWorker: 4
-    gremlinPool: 0
   
   remote.yaml: |+
     hosts: [localhost]
