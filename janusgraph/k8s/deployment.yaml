@@ -24,12 +24,19 @@ spec:
             cpu: "1"
           limits:
             memory: "4Gi"
-            cpu: "4"
+            cpu: "8"
         ports:
         - containerPort: 8182  # JanusGraph default port
         volumeMounts:
         - name: janusgraph-lindorm-config
-          mountPath: /opt/janusgraph/conf
+          mountPath: /opt/janusgraph/conf/janusgraph-lindorm-server.properties
+          subPath: janusgraph-lindorm-server.properties
+        - name: janusgraph-lindorm-config
+          mountPath: /opt/janusgraph/conf/janusgraph-server.yaml
+          subPath: janusgraph-server.yaml
+        env:
+        - name: JANUS_PROPS_TEMPLATE
+          value: lindorm
         # startupProbe:
         #   httpGet:
         #     path: /?gremlin=100-1
