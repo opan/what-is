@@ -11,9 +11,9 @@ data:
     storage.directory: null
     storage.read-only: false
     storage.hbase.table: test-lindorm
-    storage.hostname: xxxx-indorm.lindorm.rds.aliyuncs.com:30020
+    storage.hostname: ld-d9jy01c34311d39uh-proxy-lindorm.lindorm.rds.aliyuncs.com:30020
     storage.hbase.ext.hbase.client.username: root
-    storage.hbase.ext.hbase.client.password: xxxx
+    storage.hbase.ext.hbase.client.password: c58ABVHp
 
     cache.db-cache: false
     cache.db-cache-clean-wait: 20

@@ -1,0 +1,93 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: janusgraph-lindorm-config
+  namespace: janusgraph
+data:
+  janusgraph-lindorm-server.properties: |+
+    gremlin.graph=org.janusgraph.core.JanusGraphFactory
+    storage.backend: hbase
+    storage.directory: null
+    storage.read-only: false
+    storage.hbase.table: test-lindorm
+    storage.hostname: ld-d9jy01c34311d39uh-proxy-lindorm.lindorm.rds.aliyuncs.com:30020
+    storage.hbase.ext.hbase.client.username: root
+    storage.hbase.ext.hbase.client.password: c58ABVHp
+
+    cache.db-cache: false
+    cache.db-cache-clean-wait: 20
+    cache.db-cache-time: 180000
+    cache.db-cache-size: 0
+    cluster.max-partitions: 1024
+    graph.replace-instance-if-exists: true
+    metrics.enabled: false
+    metrics.jmx.enabled: false
+    ids.block-size: 1000000
+    query.batch: true
+    query.limit-batch-size: true
+    schema.constraints: true
+    schema.default: none
+    storage.batch-loading: false
+    storage.hbase.scan.parallelism: 10
+    metrics.merge-stores: false
+
+  janusgraph-server.yaml: |+
+    host: 0.0.0.0
+    port: 8182
+    channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
+    graphs: {
+      graph: conf/janusgraph-lindorm-server.properties
+    }
+
+    evaluationTimeout: 50000
+    maxInitialLineLength: 4096
+    maxHeaderSize: 8192
+    maxChunkSize: 8192
+    maxContentLength: 65536
+    maxAccumulationBufferComponents: 1024
+    resultIterationBatchSize: 64
+    writeBufferLowWaterMark: 32768
+    writeBufferHighWaterMark: 65536
+    useEpollEventLoop: true
+    useCommonEngineForSessions: true
+    useGlobalFunctionCacheForSessions: false
+    maxParameters: 128
+    maxSessionTaskQueueSize: 1024
+    maxWorkQueueSize: 1024
+
+    scriptEngines: {
+      gremlin-groovy: {
+        plugins: { org.janusgraph.graphdb.tinkerpop.plugin.JanusGraphGremlinPlugin: {},
+                  org.apache.tinkerpop.gremlin.server.jsr223.GremlinServerGremlinPlugin: {},
+                  org.apache.tinkerpop.gremlin.tinkergraph.jsr223.TinkerGraphGremlinPlugin: {},
+                  org.apache.tinkerpop.gremlin.jsr223.ImportGremlinPlugin: {classImports: [java.lang.Math], methodImports: [java.lang.Math#*]},
+                  org.apache.tinkerpop.gremlin.jsr223.ScriptFileGremlinPlugin: {files: [scripts/empty-sample.groovy]},
+                  org.apache.tinkerpop.gremlin.groovy.jsr223.GroovyCompilerGremlinPlugin: {enableThreadInterrupt: true, expectedCompilationTime: 10, globalFunctionCacheEnabled: false}}}}
+
+    serializers:
+      - { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1, config: { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry] }}
+      - { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1, config: { serializeResultToString: true }}
+      - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONMessageSerializerV3, config: { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry] }}
+      # Older serialization versions for backwards compatibility:
+      - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONMessageSerializerV2, config: { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry] }}
+      - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONMessageSerializerV1, config: { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistryV1d0] }}
+      - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONUntypedMessageSerializerV1, config: { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistryV1d0] }}
+
+    # processors:
+    #   - { className: org.apache.tinkerpop.gremlin.server.op.session.SessionOpProcessor, config: { sessionTimeout: 28800000, maxParameters: 64 }}
+    #   - { className: org.apache.tinkerpop.gremlin.server.op.traversal.TraversalOpProcessor, config: { cacheExpirationTime: 600000, cacheMaxSize: 1000 }}
+    #   - { className: org.apache.tinkerpop.gremlin.server.op.standard.StandardOpProcessor, config: { maxParameters: 64 }}
+
+    # metrics: {
+    #   consoleReporter: {enabled: false, interval: 180000},
+    #   csvReporter: {enabled: false, interval: 180000, fileName: /tmp/gremlin-server-metrics.csv},
+    #   jmxReporter: {enabled: true},
+    #   slf4jReporter: {enabled: {{ .Values.janusgraphServer.metrics.slf4jReporter.enabled }}, interval: {{ .Values.janusgraphServer.metrics.slf4jReporter.intervalMS }} },
+    #   gangliaReporter: {enabled: false, interval: 180000, addressingMode: MULTICAST},
+    #   graphiteReporter: {enabled: false, interval: 180000}}
+  
+  remote.yaml: |+
+    hosts: [localhost]
+    port: 8182
+    serializer: { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1, config: { serializeResultToString: true }}
