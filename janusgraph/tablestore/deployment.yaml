@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: janusgraph-lindorm
+  name: janusgraph-tablestore
   namespace: janusgraph
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: janusgraph-lindorm
+      app: janusgraph-tablestore
   template:
     metadata:
       labels:
-        app: janusgraph-lindorm
+        app: janusgraph-tablestore
     spec:
       containers:
-      - name: janusgraph-lindorm
+      - name: janusgraph-tablestore
         image: janusgraph/janusgraph:1.0.0
         imagePullPolicy: Always
         resources:
@@ -28,10 +28,10 @@ spec:
         ports:
         - containerPort: 8182  # JanusGraph default port
         volumeMounts:
-        - name: janusgraph-lindorm-config
-          mountPath: /opt/janusgraph/conf/janusgraph-lindorm-server.properties
-          subPath: janusgraph-lindorm-server.properties
-        - name: janusgraph-lindorm-config
+        - name: janusgraph-tablestore-config
+          mountPath: /opt/janusgraph/conf/janusgraph-tablestore-server.properties
+          subPath: janusgraph-tablestore-server.properties
+        - name: janusgraph-tablestore-config
           mountPath: /opt/janusgraph/conf/janusgraph-server.yaml
           subPath: janusgraph-server.yaml
         env:
@@ -60,6 +60,6 @@ spec:
         #   periodSeconds: 2
         #   timeoutSeconds: 1
       volumes:
-      - name: janusgraph-lindorm-config
+      - name: janusgraph-tablestore-config
         configMap:
-          name: janusgraph-lindorm-config
+          name: janusgraph-tablestore-config

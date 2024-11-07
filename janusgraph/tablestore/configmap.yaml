@@ -2,42 +2,58 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: janusgraph-lindorm-config
+  name: janusgraph-tablestore-config
   namespace: janusgraph
 data:
-  janusgraph-lindorm-server.properties: |+
+  janusgraph-tablestore-server.properties: |+
     gremlin.graph=org.janusgraph.core.JanusGraphFactory
-    storage.backend: hbase
-    storage.directory: null
-    storage.read-only: false
-    storage.hbase.table: test-lindorm
-    storage.hostname: ld-d9jy01c34311d39uh-proxy-lindorm.lindorm.rds.aliyuncs.com:30020
-    storage.hbase.ext.hbase.client.username: root
-    storage.hbase.ext.hbase.client.password: c58ABVHp
+    storage.backend=tablestore
+    storage.hbase.ext.hbase.client.connection.impl=com.alicloud.tablestore.hbase.TablestoreConnection
+    storage.hbase.ext.tablestore.client.endpoint=https://jg-test.ap-southeast-5.ots.aliyuncs.com:443
+    storage.hbase.ext.tablestore.client.instancename=jg-test
+    storage.hbase.ext.tablestore.client.accesskeyid=xxx
+    storage.hbase.ext.tablestore.client.accesskeysecret=xxx
+    storage.hbase.ext.hbase.client.tablestore.table=test_table
+    storage.hbase.ext.hbase.defaults.for.version.skip=true
+    storage.hbase.ext.hbase.hconnection.meta.lookup.threads.core=4
+    storage.hbase.ext.hbase.hconnection.threads.keepalivetime=3
+    storage.hbase.ext.hbase.client.tablestore.family=s
 
-    cache.db-cache: false
-    cache.db-cache-clean-wait: 20
-    cache.db-cache-time: 180000
-    cache.db-cache-size: 0
-    cluster.max-partitions: 1024
+    graph.assign-timestamp=false
+    graph.timestamps=NANO
+    graph.allow-upgrade=false
+    graph.allow-stale-config=true
     graph.replace-instance-if-exists: true
-    metrics.enabled: false
-    metrics.jmx.enabled: false
-    ids.block-size: 1000000
+
     query.batch: true
     query.limit-batch-size: true
+
     schema.constraints: true
     schema.default: none
+
+    cluster.max-partitions: 1024
+
+    ids.block-size: 1000000
+
+    storage.lock.wait-time=1000
     storage.batch-loading: false
     storage.hbase.scan.parallelism: 10
+
+    cache.db-cache=true
+    cache.db-cache-clean-wait=20
+    cache.db-cache-time=180000
+    cache.db-cache-size=0.5
+
     metrics.merge-stores: false
+    metrics.enabled: false
+    metrics.jmx.enabled: false
 
   janusgraph-server.yaml: |+
     host: 0.0.0.0
     port: 8182
     channelizer: org.apache.tinkerpop.gremlin.server.channel.WsAndHttpChannelizer
     graphs: {
-      graph: conf/janusgraph-lindorm-server.properties
+      graph: conf/janusgraph-tablestore-server.properties
     }
 
     evaluationTimeout: 50000
