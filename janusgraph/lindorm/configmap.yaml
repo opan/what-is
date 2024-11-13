@@ -11,9 +11,9 @@ data:
     storage.directory: null
     storage.read-only: false
     storage.hbase.table: test-lindorm
-    storage.hostname: ld-d9jy01c34311d39uh-proxy-lindorm.lindorm.rds.aliyuncs.com:30020
-    storage.hbase.ext.hbase.client.username: root
-    storage.hbase.ext.hbase.client.password: c58ABVHp
+    storage.hostname: ld-d9j575h5ta418e5nk-proxy-lindorm.lindorm.rds.aliyuncs.com:30020
+    storage.hbase.ext.hbase.client.username: bar
+    storage.hbase.ext.hbase.client.password: bar
 
     cache.db-cache: false
     cache.db-cache-clean-wait: 20
@@ -74,10 +74,10 @@ data:
       - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONMessageSerializerV1, config: { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistryV1d0] }}
       - { className: org.apache.tinkerpop.gremlin.util.ser.GraphSONUntypedMessageSerializerV1, config: { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistryV1d0] }}
 
-    # processors:
-    #   - { className: org.apache.tinkerpop.gremlin.server.op.session.SessionOpProcessor, config: { sessionTimeout: 28800000, maxParameters: 64 }}
-    #   - { className: org.apache.tinkerpop.gremlin.server.op.traversal.TraversalOpProcessor, config: { cacheExpirationTime: 600000, cacheMaxSize: 1000 }}
-    #   - { className: org.apache.tinkerpop.gremlin.server.op.standard.StandardOpProcessor, config: { maxParameters: 64 }}
+    processors:
+      - { className: org.apache.tinkerpop.gremlin.server.op.session.SessionOpProcessor, config: { sessionTimeout: 28800000, maxParameters: 64 }}
+      - { className: org.apache.tinkerpop.gremlin.server.op.traversal.TraversalOpProcessor, config: { cacheExpirationTime: 600000, cacheMaxSize: 1000 }}
+      - { className: org.apache.tinkerpop.gremlin.server.op.standard.StandardOpProcessor, config: { maxParameters: 64 }}
 
     # metrics: {
     #   consoleReporter: {enabled: false, interval: 180000},
