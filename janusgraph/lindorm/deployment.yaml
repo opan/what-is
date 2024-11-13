@@ -39,21 +39,21 @@ spec:
           value: lindorm
         - name: JAVA_OPTIONS
           value: "-XX:MaxRAMPercentage=80.0  -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=1  -XX:+UseTLAB -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -Dgremlin.io.kryoShimService=org.janusgraph.hadoop.serialize.JanusGraphKryoShimService"
-        # startupProbe:
-        #   httpGet:
-        #     path: /?gremlin=100-1
-        #     port: 8182
-        #   initialDelaySeconds: 60
-        #   failureThreshold: 10
-        #   periodSeconds: 5
-        #   timeoutSeconds: 1
-        # livenessProbe:
-        #   tcpSocket:
-        #     port: 8182
-        #   initialDelaySeconds: 30
-        #   failureThreshold: 3
-        #   periodSeconds: 10
-        #   timeoutSeconds: 1
+        startupProbe:
+          httpGet:
+            path: /?gremlin=100-1
+            port: 8182
+          initialDelaySeconds: 60
+          failureThreshold: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
+        livenessProbe:
+          tcpSocket:
+            port: 8182
+          initialDelaySeconds: 30
+          failureThreshold: 3
+          periodSeconds: 10
+          timeoutSeconds: 1
         readinessProbe:
           httpGet:
             path: /?gremlin=100-1
