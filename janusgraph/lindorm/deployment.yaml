@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: janusgraph-lindorm
-        image: janusgraph/janusgraph:1.0.0
+        image: asia.gcr.io/gopay-systems/janusgraph_base_v1.0.0:v1.0.0-rc.1
+        # image: janusgraph/janusgraph:1.0.0
         imagePullPolicy: Always
         resources:
           requests:
@@ -38,7 +39,7 @@ spec:
         - name: JANUS_PROPS_TEMPLATE
           value: lindorm
         - name: JAVA_OPTIONS
-          value: "-XX:MaxRAMPercentage=80.0  -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=1  -XX:+UseTLAB -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -Dgremlin.io.kryoShimService=org.janusgraph.hadoop.serialize.JanusGraphKryoShimService"
+          value: "-XX:MaxRAMPercentage=80.0  -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=1  -XX:+UseTLAB -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -Dgremlin.io.kryoShimService=org.janusgraph.hadoop.serialize.JanusGraphKryoShimService -javaagent:/opt/janusgraph/lib/jmx_prometheus_javaagent-1.0.1.jar=8090:/opt/janusgraph/prometheus/conf/prometheus_config.yml -javaagent:/opt/janusgraph/lib/newrelic-agent-7.4.3.jar -Dnewrelic.config.license_key=NEW_RELIC_LICENSE_KEY -Dnewrelic.config.app_name=janusgraph-lindorm-test"
         startupProbe:
           httpGet:
             path: /?gremlin=100-1
@@ -61,6 +62,8 @@ spec:
           initialDelaySeconds: 0
           periodSeconds: 2
           timeoutSeconds: 1
+      imagePullSecrets:
+      - name: gcr-registry
       volumes:
       - name: janusgraph-lindorm-config
         configMap:

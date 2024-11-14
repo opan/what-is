@@ -12,8 +12,8 @@ data:
     storage.read-only: false
     storage.hbase.table: test-lindorm
     storage.hostname: ld-d9j575h5ta418e5nk-proxy-lindorm.lindorm.rds.aliyuncs.com:30020
-    storage.hbase.ext.hbase.client.username: bar
-    storage.hbase.ext.hbase.client.password: bar
+    storage.hbase.ext.hbase.client.username: xxx
+    storage.hbase.ext.hbase.client.password: xxx
 
     cache.db-cache: false
     cache.db-cache-clean-wait: 20
@@ -24,8 +24,8 @@ data:
     metrics.enabled: false
     metrics.jmx.enabled: false
     ids.block-size: 1000000
-    query.batch: true
-    query.limit-batch-size: true
+    query.batch.enabled: true
+    query.batch.limited: true
     schema.constraints: true
     schema.default: none
     storage.batch-loading: false
@@ -79,15 +79,24 @@ data:
       - { className: org.apache.tinkerpop.gremlin.server.op.traversal.TraversalOpProcessor, config: { cacheExpirationTime: 600000, cacheMaxSize: 1000 }}
       - { className: org.apache.tinkerpop.gremlin.server.op.standard.StandardOpProcessor, config: { maxParameters: 64 }}
 
-    # metrics: {
-    #   consoleReporter: {enabled: false, interval: 180000},
-    #   csvReporter: {enabled: false, interval: 180000, fileName: /tmp/gremlin-server-metrics.csv},
-    #   jmxReporter: {enabled: true},
-    #   slf4jReporter: {enabled: {{ .Values.janusgraphServer.metrics.slf4jReporter.enabled }}, interval: {{ .Values.janusgraphServer.metrics.slf4jReporter.intervalMS }} },
-    #   gangliaReporter: {enabled: false, interval: 180000, addressingMode: MULTICAST},
-    #   graphiteReporter: {enabled: false, interval: 180000}}
+    metrics: {
+      consoleReporter: {enabled: false, interval: 180000},
+      csvReporter: {enabled: false, interval: 180000, fileName: /tmp/gremlin-server-metrics.csv},
+      jmxReporter: {enabled: true},
+      slf4jReporter: {enabled: true, interval: 120000 },
+      gangliaReporter: {enabled: false, interval: 180000, addressingMode: MULTICAST},
+      graphiteReporter: {enabled: false, interval: 180000}}
   
   remote.yaml: |+
     hosts: [localhost]
     port: 8182
     serializer: { className: org.apache.tinkerpop.gremlin.util.ser.GraphBinaryMessageSerializerV1, config: { serializeResultToString: true }}
+
+  log4j-server.properties: |+
+    log4j.appender.console=org.apache.log4j.ConsoleAppender
+    log4j.appender.console.Threshold=INFO
+    log4j.appender.console.layout=biz.paluch.logging.gelf.log4j.GelfLayout
+    log4j.appender.console.layout.ConversionPattern='{"timestamp":"%d{ISO8601}","level":"%p","thread":"%t","logger":"%c","message":"%m","exception":"%throwable{1000}"}%n'
+    log4j.appender.console.layout.ExtractStackTrace=true
+    log4j.category.com.google.cloud.bigtable.metrics=DEBUG
+    log4j.rootLogger="INFO, console"
