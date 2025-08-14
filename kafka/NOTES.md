@@ -32,6 +32,10 @@ https://github.com/apache/kafka/blob/trunk/docker/examples/README.md
 
 Docker image source: https://hub.docker.com/r/bitnami/kafka
 
+### Topics
+
+Kafka topic naming convention: https://cnr.sh/essays/how-paint-bike-shed-kafka-topic-naming-conventions
+
 ### Partition
 
 Producer can only write a topic to a partition leader (default behaviour)
@@ -40,6 +44,8 @@ All replica of partition that successfully sync with the partition leader called
 
 Consumer can only consumer a topic from a partition leader (default behaviour)
 Since kafka 2.4+, it is possible to configure consumer to consumer a topic from the closest replica
+
+Changing the number of partition in the middle is dangerous because its braking the ordering guarantee.
 
 ### Producer ACKs
 
@@ -155,3 +161,40 @@ heartbeat.interval.ms # default 3ms
 session.timeout.ms # default 45s for v3+, 10s for < v3
 
 ```
+
+### Consumer poll thread
+
+```
+# define max amount between two poll calls before declaring that the consumer are dead
+# to check issue with consumer, e.g: consumer is stuck
+max.poll.interval.ms # default 5min 
+
+# to control how many records to receive per poll request
+max.poll.records # default 500
+
+# control how much data to pull at least on each request
+# to improve throughput and decrease request number with the cost of latency
+fetch.min.bytes # default 1
+
+# set max amount of time for kafka broker will block before answering the fetch request if there isn't sufficient data
+# to immediately satisfy the requirement given by fetch.min.bytes
+fetch.max.wait.ms # default 500
+
+# max amount of data per partition the server will return
+# the more partition, the more memory consumed
+max.partition.fetch.bytes # default 1MB
+
+# max data returned for each fetch request
+fetch.max.bytes
+```
+
+### Consumer rack awareness
+
+Must use kafka v2.4+
+
+Broker config:
+- config `rack.id` must be set to the data center ID, e.g: AZ ID in AWS
+- `replica.selector.class` must be set to `org.apache.kafka.common.replica.RackAwareReplicaSelector`
+
+Consumer config:
+- set `rack.id` the same ID with the one set in the broker
